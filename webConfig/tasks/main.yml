@@ -1,0 +1,41 @@
+---
+# tasks file for webConfig
+- name: Installing PHP
+  package:
+          name: php
+          state: present
+
+- name: Creating doc root folder for webserver
+  file:
+          state: directory            
+          path: "{{ doc_root }}"
+        
+- name: Copying the content of website in doc root
+  copy:
+          dest: "{{ doc_root }}/index.php"
+          src: ./index.php
+        
+- name: Installing Apache Webserver software
+  package:
+          name: httpd
+          state: present
+
+- name: Changing the configuration file for doc root & port number
+  template:
+          dest: "/etc/httpd/conf.d/{{ conf_file }}.conf"
+          src: "./{{ conf_file }}.j2"
+  notify:
+          - restart apache
+
+# - name: Allowing webserver port through firewall
+#   ansible.posix.firewalld:
+#           port: "{{ ws_port }}/tcp"
+#           state: enabled
+#           permanent: yes
+#           immediate: yes
+#   ignore_errors: yes
+
+- name: Ensuring that webserver is running
+  service:
+           name: httpd
+           state: started

@@ -1,0 +1,25 @@
+---
+# tasks file for lbConfig
+- name: Installing HAProxy
+  package:
+          name: haproxy
+          state: present
+
+- name: Configuring HAProxy
+  template:
+          dest: /etc/haproxy/haproxy.cfg
+          src: ./lb.j2
+  notify: restart HAProxy
+
+- name: Starting HAProxy
+  service:
+          name: haproxy
+          state: started
+
+# - name: Allowing LB through firewall
+#   ansible.posix.firewalld:
+#           port: "{{ ws_port }}/tcp"
+#           state: enabled
+#           permanent: yes
+#           immediate: yes
+#   ignore_errors: yes

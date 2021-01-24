@@ -1,0 +1,33 @@
+---
+# tasks file for ec2Launch
+- name: Launch AWS Instance for webserver
+  amazon.aws.ec2:
+          aws_access_key: "{{ ac_k }}"
+          aws_secret_key: "{{ se_k }}"
+          security_token: "{{ sec_t }}"
+          image: ami-096fda3c22c1c990a
+          instance_type: t2.micro
+          count: "{{ count }}"
+          group_id: sg-0720a69d5c8d489da
+          instance_tags: 
+            type: webserver
+          key_name: awsed
+          region: us-east-1
+          wait: true
+          wait_timeout: 1000
+
+- name: Launch AWS Instance for load balancer
+  amazon.aws.ec2:
+          aws_access_key: "{{ ac_k }}"
+          aws_secret_key: "{{ se_k }}"
+          security_token: "{{ sec_t }}"
+          image: ami-096fda3c22c1c990a
+          instance_type: t2.micro
+          count: 1
+          group_id: sg-0720a69d5c8d489da
+          instance_tags: 
+            type: lb
+          key_name: awsed
+          region: us-east-1
+          wait: true
+          wait_timeout: 1000

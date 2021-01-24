@@ -1,0 +1,34 @@
+- hosts: lb
+  gather_facts: no
+  vars_files: aws_vars.yml
+  vars_prompt:
+  - name: count
+    prompt: "Webserver count"
+    private: no
+
+  tasks:
+  - name: Launch EC2 Instances
+    include_role:
+      name: ec2Launch
+  
+  - name: Add webserver & loadbalancer IPs to host group
+    include_role:
+      name: addHost
+
+- hosts: aws_lb
+  vars_files: 
+  - key_vars.yml
+  - aws_vars.yml
+  tasks:
+  - name: Configure Load Balancers
+    include_role:
+      name: lbConfig
+
+- hosts: aws_webserver
+  vars_files: 
+  - key_vars.yml
+  - aws_vars.yml
+  tasks:
+  - name: Configuring webserver on AWS
+    include_role:
+      name: webConfig

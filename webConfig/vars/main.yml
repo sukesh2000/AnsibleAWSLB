@@ -1,0 +1,5 @@
+---
+# vars file for webConfig
+ws_port: 81
+doc_root: /var/www/lw
+conf_file: web

@@ -1,0 +1,6 @@
+---
+# handlers file for lbConfig
+- name: restart HAProxy
+  service:
+          name: haproxy
+          state: restarted

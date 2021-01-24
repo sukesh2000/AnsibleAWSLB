@@ -1,0 +1,39 @@
+---
+# tasks file for addHost
+- name: Fetch details of instance with tag type webserver
+  ec2_instance_info:
+          aws_access_key: "{{ ac_k }}"
+          aws_secret_key: "{{ se_k }}"
+          security_token: "{{ sec_t }}"
+          region: us-east-1
+          filters:
+            tag:type: webserver
+            instance-state-name: [ "pending", "running" ]
+  register: ec2Web
+
+- name: Get IP of webservers and add it to host group
+  add_host:
+          hostname: "{{ item.public_ip_address }}"
+          groups: aws_webserver
+  loop:
+    "{{ ec2Web.instances }}"
+  no_log: true
+
+- name: Fetch details of instance with tag type lb
+  ec2_instance_info:
+          aws_access_key: "{{ ac_k }}"
+          aws_secret_key: "{{ se_k }}"
+          security_token: "{{ sec_t }}"
+          region: us-east-1
+          filters:
+            tag:type: lb
+            instance-state-name: [ "pending", "running" ]
+  register: ec2LB
+  
+- name: Get IP of webservers and add it to host group
+  add_host:
+          hostname: "{{ item.public_ip_address }}"
+          groups: aws_lb
+  loop:
+    "{{ ec2LB.instances }}"
+  no_log: true

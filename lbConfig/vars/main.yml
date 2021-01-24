@@ -1,0 +1,4 @@
+---
+# vars file for lbConfig
+lb_port: 8080
+ws_port: 81

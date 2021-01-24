@@ -1,0 +1,5 @@
+Listen {{ ws_port }}
+
+<VirtualHost {{ ansible_facts['eth0']['ipv4']['address'] }}:{{ ws_port }}>
+DocumentRoot {{ doc_root }}
+</VirtualHost>
